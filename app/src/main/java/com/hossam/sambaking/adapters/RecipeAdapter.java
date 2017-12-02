@@ -1,48 +1,74 @@
 package com.hossam.sambaking.adapters;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.hossam.sambaking.BR;
 import com.hossam.sambaking.R;
+import com.hossam.sambaking.activities.RecipeDetailsActivity;
+import com.hossam.sambaking.databinding.RecipeCardListItemBinding;
+import com.hossam.sambaking.models.Recipe;
+
+import java.util.ArrayList;
 
 /**
  * Created by hossam on 24/11/17.
  */
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
+    ArrayList<Recipe> recipes;
+    Activity activity;
+    public RecipeAdapter( Activity activity,ArrayList<Recipe> recipes) {
+        this.recipes = recipes;
+        this.activity = activity;
+    }
 
-
-
-
-
-
+    public RecipeAdapter() {
+    }
 
     @Override
     public RecipeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.recipe_card_list_item, parent, false);
+        RecipeCardListItemBinding recipeCardListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.recipe_card_list_item, parent, false);
 
-        return new ViewHolder(viewDataBinding);
+        return new ViewHolder(recipeCardListItemBinding);
     }
 
     @Override
     public void onBindViewHolder(RecipeAdapter.ViewHolder holder, int position) {
-//        ViewDataBinding viewDataBinding =holder.getViewDataBinding();
+        final Recipe item = recipes.get(position);
+        holder.bind(item);
+        holder.binding.getRoot().setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        Toast.makeText(activity, "clicked", Toast.LENGTH_SHORT).show();
+                        activity.startActivity(new Intent(activity, RecipeDetailsActivity.class)
+                                .putExtra("RecipeDetails",item));
+                    }
+                }
+        );
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return recipes.size();
     }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        final ViewDataBinding binding;
-         ViewHolder(ViewDataBinding itemView) {
+        final RecipeCardListItemBinding binding;
+         ViewHolder(RecipeCardListItemBinding itemView) {
             super(itemView.getRoot());
              this.binding = itemView;
+        }
+        public void bind(Object obj) {
+            binding.setVariable(BR.recipe,obj);
+            binding.executePendingBindings();
         }
     }
 }

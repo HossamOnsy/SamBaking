@@ -5,13 +5,13 @@
     <data>
 
         <variable
-            name="recipe"
-            type="com.hossam.sambaking.models.Recipe" />
+            name="step"
+            type="com.hossam.sambaking.models.Step" />
     </data>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="90sp"
+        android:layout_height="60sp"
         android:layout_margin="16sp"
         android:elevation="16sp"
         android:orientation="vertical"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/white"
-            android:text="@{recipe.name}" />
+            android:text="@{step.shortDescription}" />
 
 
     </android.support.v7.widget.CardView>
