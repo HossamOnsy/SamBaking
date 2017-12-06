@@ -17,6 +17,8 @@ import com.hossam.sambaking.models.Step;
 
 import java.util.List;
 
+import static com.hossam.sambaking.activities.RecipeDetailsActivity.isTwoPane;
+
 /**
  * Created by hossam on 24/11/17.
  */
@@ -54,7 +56,11 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                         FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
                         RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
                         recipeStepsFragment.setArguments(bundle);
-                        fragmentTransaction.replace(R.id.fragment_container, recipeStepsFragment).addToBackStack(null);
+                        if(isTwoPane)
+                            fragmentTransaction.replace(R.id.fragment_container_details, recipeStepsFragment).addToBackStack(null);
+                        else
+                            fragmentTransaction.replace(R.id.fragment_container, recipeStepsFragment).addToBackStack(null);
+
                         fragmentTransaction.commit();
 //                        Toast.makeText(activity, "clicked", Toast.LENGTH_SHORT).show();
 

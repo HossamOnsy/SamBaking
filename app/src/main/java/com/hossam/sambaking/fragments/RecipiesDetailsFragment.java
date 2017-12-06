@@ -19,6 +19,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.hossam.sambaking.activities.RecipeDetailsActivity.isTwoPane;
+
 
 public class RecipiesDetailsFragment extends Fragment {
     @BindView(R.id.recipes_recycler_view)
@@ -44,7 +46,10 @@ public class RecipiesDetailsFragment extends Fragment {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
             recipeIngredientsFragment.setArguments(bundle);
-            fragmentTransaction.replace(R.id.fragment_container, recipeIngredientsFragment).addToBackStack(null);
+            if(isTwoPane)
+            fragmentTransaction.replace(R.id.fragment_container_details, recipeIngredientsFragment).addToBackStack(null);
+            else
+                fragmentTransaction.replace(R.id.fragment_container, recipeIngredientsFragment).addToBackStack(null);
             fragmentTransaction.commit();
         }
     }
