@@ -8,20 +8,25 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.hossam.sambaking.R;
 import com.hossam.sambaking.models.Step;
 
@@ -45,6 +50,8 @@ public class RecipeStepsFragment extends Fragment {
     TextView long_description_tv;
     @BindView(R.id.video_view)
     SimpleExoPlayerView video_view;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
     SimpleExoPlayer player;
 
     Unbinder unbinder;
@@ -66,6 +73,7 @@ public class RecipeStepsFragment extends Fragment {
         if (getArguments() != null) {
              step = getArguments().getParcelable("RecipeStepDetails");
             long_description_tv.setText(step != null ? step.getDescription() : null);
+            progress_bar.setVisibility(View.VISIBLE);
 //            if(step != null && step.getThumbnailURL().equals(""))
 //            Glide.with(this).load(step.getThumbnailURL() ).into(iv_step);
 //            else
@@ -124,8 +132,6 @@ public class RecipeStepsFragment extends Fragment {
 //                    new DefaultRenderersFactory(getActivity().getApplicationContext()),
 //                    new DefaultTrackSelector(), new DefaultLoadControl());
 
-
-
             MediaSource mediaSource = buildMediaSource(uri);
             if(player==null) {
                 player = ExoPlayerFactory.newSimpleInstance(
@@ -135,8 +141,44 @@ public class RecipeStepsFragment extends Fragment {
             }
             player.setPlayWhenReady(true);
             player.prepare(mediaSource, true, false);
+            player.setVideoDebugListener(new VideoRendererEventListener() {
+                @Override
+                public void onVideoEnabled(DecoderCounters counters) {
+                    progress_bar.setVisibility(View.GONE);
+                }
 
+                @Override
+                public void onVideoDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+
+                }
+
+                @Override
+                public void onVideoInputFormatChanged(Format format) {
+
+                }
+
+                @Override
+                public void onDroppedFrames(int count, long elapsedMs) {
+
+                }
+
+                @Override
+                public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+
+                }
+
+                @Override
+                public void onRenderedFirstFrame(Surface surface) {
+
+                }
+
+                @Override
+                public void onVideoDisabled(DecoderCounters counters) {
+
+                }
+            });
             video_view.setPlayer(player);
+
         }
 
 //        player.setPlayWhenReady(playWhenReady);

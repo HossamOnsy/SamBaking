@@ -24,6 +24,20 @@
             android:configChanges="orientation|screenSize">
 
         </activity>
+        <receiver
+            android:icon="@drawable/exo_controls_play"
+            android:label="Example Widget"
+            android:name=".activities.SimpleAppWidget">
+        <intent-filter>
+            <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+        </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/simple_app_widget_info"/>
+
+        </receiver>
+        <service android:name=".activities.MyWidgetRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"></service>
     </application>
 
 </manifest>

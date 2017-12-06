@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.hossam.sambaking.R;
+import com.hossam.sambaking.activities.SimpleAppWidget;
 import com.hossam.sambaking.adapters.RecipeIngredientsAdapter;
 import com.hossam.sambaking.models.Recipe;
 
@@ -44,9 +45,20 @@ public class RecipeIngredientsFragment extends Fragment {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             recipes_recycler_view.setLayoutManager(linearLayoutManager);
             Bundle bundle = getArguments();
-            Recipe recipe = bundle.getParcelable("RecipeDetails");
+            final Recipe recipe = bundle.getParcelable("RecipeDetails");
             RecipeIngredientsAdapter recipeIngredientsAdapter= null;
             if (recipe != null) {
+                SimpleAppWidget simpleAppWidget = new SimpleAppWidget();
+
+             getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "New task created", Toast.LENGTH_LONG).show();
+                        recipe.getIngredients();
+                        // this will send the broadcast to update the appwidget
+                        SimpleAppWidget.sendRefreshBroadcast(getActivity());
+                    }
+                });
                 recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(),recipe.getIngredients());
                 recipes_recycler_view.setAdapter(recipeIngredientsAdapter);
             }else

@@ -74,10 +74,10 @@ public class MainActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         // You can change this divider to adjust the size of the poster
-        int widthDivider = 500;
+        int widthDivider = 400;
         int width = displayMetrics.widthPixels;
         int nColumns = width / widthDivider;
-        if (nColumns < 2) return 1;
+        if (nColumns < 2) return 2;
         return nColumns;
     }
 
