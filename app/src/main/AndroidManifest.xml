@@ -36,8 +36,8 @@
                 android:resource="@xml/simple_app_widget_info"/>
 
         </receiver>
-        <service android:name=".activities.MyWidgetRemoteViewsService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"></service>
+        <!--<service android:name=".activities.MyWidgetRemoteViewsService"-->
+            <!--android:permission="android.permission.BIND_REMOTEVIEWS"></service>-->
     </application>
 
 </manifest>
