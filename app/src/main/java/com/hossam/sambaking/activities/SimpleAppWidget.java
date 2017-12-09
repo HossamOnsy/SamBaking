@@ -48,6 +48,7 @@ public class SimpleAppWidget extends AppWidgetProvider {
         }
     }
 
+
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
