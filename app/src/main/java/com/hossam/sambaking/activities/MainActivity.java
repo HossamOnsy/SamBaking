@@ -1,16 +1,19 @@
 package com.hossam.sambaking.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.view.View;
 
 import com.hossam.sambaking.R;
 import com.hossam.sambaking.adapters.RecipeAdapter;
 import com.hossam.sambaking.controller.RecipesController;
 import com.hossam.sambaking.models.Recipe;
+import com.hossam.sambaking.services.ConnectivityReceiver;
 
 import java.util.ArrayList;
 
@@ -21,13 +24,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
+    public static Recipe recipe = null;
+
+    public static boolean isTwoPane;
 
     @BindView(R.id.recipes_recycler_view)
     RecyclerView recipes_recycler_view;
+    @BindView(R.id.coordinator)
+    CoordinatorLayout coordinator;
 
     Unbinder unbinder;
     RecipeAdapter recipeAdapter;
+
+    Snackbar snackbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,36 +47,48 @@ public class MainActivity extends AppCompatActivity {
 
         unbinder = ButterKnife.bind(this);
 
+        isTwoPane = getResources().getBoolean(R.bool.isTablet);
 
         recipes_recycler_view.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this,numberOfColumns());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, numberOfColumns());
         recipes_recycler_view.setLayoutManager(gridLayoutManager);
 
-        getRecipes();
+        checkConnection();
+
+    }
+
+    private void checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        onNetworkConnectionChanged(isConnected);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MyApplication.getInstance().setConnectivityListener(this);
     }
 
     private void getRecipes() {
         RecipesController.getRecipe(MainActivity.this, new Callback<ArrayList<Recipe>>() {
             @Override
             public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                if(response.code()>=200&&response.code()<300&&response.isSuccessful()){
-                    Log.v("DataNotRecieved","DataNotRecieved --- IF of Response");
-                    for(Recipe recipe : response.body())
-                        Log.v("recipename",recipe.getName());
+                if (response.code() >= 200 && response.code() < 300 && response.isSuccessful()) {
 
-                    recipeAdapter=new RecipeAdapter(MainActivity.this,response.body());
+                    if (recipe == null)
+                        if (response.body().size() > 0)
+                            recipe = response.body().get(0);
+
+                    recipeAdapter = new RecipeAdapter(MainActivity.this, response.body());
                     recipes_recycler_view.setAdapter(recipeAdapter);
 
-                    Log.v("DataNotRecieved","DataNotRecieved --- IF of Response + Count " +    recipes_recycler_view.getChildCount());
-                }else
-                    Log.v("DataNotRecieved","DataNotRecieved --- Else of Response");
+
+                } else
+                    prepareSnack("Please Try Again Later", "DISMISS");
             }
 
             @Override
             public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
-                Log.v("DataNotRecieved","DataNotRecieved --- Failure ------> " + t.getLocalizedMessage());
-                Log.v("DataNotRecieved","DataNotRecieved --- Failure ------> " + t.getMessage());
-                Log.v("DataNotRecieved","DataNotRecieved --- Failure ------> " + t.getCause());
+                prepareSnack("Internet not Connected", "RETRY");
             }
         });
     }
@@ -82,14 +105,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(unbinder!=null)
+        if (unbinder != null)
             unbinder.unbind();
 
     }
 
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected) {
+            prepareSnack("Internet is now connected ... Thank You !!! ", "DONE");
+            getRecipes();
+        } else {
+            prepareSnack("Internet not Connected", "RETRY");
+        }
+
+    }
+
+    public void prepareSnack(String Message, String ButtonMessage) {
+
+        snackbar = Snackbar.make(coordinator, Message, Snackbar.LENGTH_LONG)
+                .setAction(ButtonMessage, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getRecipes();
+                        snackbar.dismiss();
+                    }
+                });
+
+        snackbar.show();
+    }
 }

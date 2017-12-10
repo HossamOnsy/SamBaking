@@ -37,11 +37,9 @@ import butterknife.Unbinder;
 
 public class RecipeStepsFragment extends Fragment {
 
+    public static boolean activityCreated = false;
     Step step;
-    public RecipeStepsFragment() {
-        // Required empty public constructor
-    }
-
+    Bundle bundle = null;
     //    @BindView(R.id.step_media_player)
 //    View step_media_player;
 //    @BindView(R.id.iv_step)
@@ -56,6 +54,16 @@ public class RecipeStepsFragment extends Fragment {
 
     Unbinder unbinder;
 
+    public RecipeStepsFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // retain this fragment when activity is re-initialized
+        setRetainInstance(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,10 +76,12 @@ public class RecipeStepsFragment extends Fragment {
 //        recipes_recycler_view.setLayoutManager(linearLayoutManager);
 //
         unbinder = ButterKnife.bind(this, view);
-        video_view = ButterKnife.findById(view,R.id.video_view);
+        video_view = ButterKnife.findById(view, R.id.video_view);
 
+        if (savedInstanceState != null)
+            bundle = savedInstanceState;
         if (getArguments() != null) {
-             step = getArguments().getParcelable("RecipeStepDetails");
+            step = getArguments().getParcelable("RecipeStepDetails");
             long_description_tv.setText(step != null ? step.getDescription() : null);
             progress_bar.setVisibility(View.VISIBLE);
 //            if(step != null && step.getThumbnailURL().equals(""))
@@ -92,14 +102,34 @@ public class RecipeStepsFragment extends Fragment {
         return view;
     }
 
-    public static boolean activityCreated = false;
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         activityCreated = true;
 
         Log.v("StatusOfFragment", "onStart ");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (player != null)
+            player.release();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (player != null)
+            player.stop();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (player != null)
+            player.stop();
     }
 
     @Override
@@ -133,7 +163,7 @@ public class RecipeStepsFragment extends Fragment {
 //                    new DefaultTrackSelector(), new DefaultLoadControl());
 
             MediaSource mediaSource = buildMediaSource(uri);
-            if(player==null) {
+            if (player == null) {
                 player = ExoPlayerFactory.newSimpleInstance(
                         new DefaultRenderersFactory(getActivity().getApplicationContext()),
                         new DefaultTrackSelector(), new DefaultLoadControl());
@@ -177,13 +207,25 @@ public class RecipeStepsFragment extends Fragment {
 
                 }
             });
+
             video_view.setPlayer(player);
+            if (bundle != null) {
+                player.seekTo(bundle.getLong("timer"));
+            }
 
         }
 
 //        player.setPlayWhenReady(playWhenReady);
 //        player.seekTo(currentWindow, playbackPosition);
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("timer", player.getCurrentPosition());
+    }
+
 
     private MediaSource buildMediaSource(Uri uri) {
         return new ExtractorMediaSource(uri,

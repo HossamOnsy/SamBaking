@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 
 import com.hossam.sambaking.R;
 import com.hossam.sambaking.adapters.RecipeStepsAdapter;
-import com.hossam.sambaking.models.Recipe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.hossam.sambaking.activities.MainActivity.recipe;
 import static com.hossam.sambaking.activities.RecipeDetailsActivity.isTwoPane;
 
 
@@ -27,27 +27,32 @@ public class RecipiesDetailsFragment extends Fragment {
     RecyclerView recipes_recycler_view;
     @BindView(R.id.ingredient_cv)
     CardView ingredient_cv;
-    Recipe recipe;
     Bundle bundle;
     Unbinder unbinder;
     RecipeStepsAdapter recipeStepsAdapter;
+
     public RecipiesDetailsFragment() {
         // Required empty public constructor
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // retain this fragment when activity is re-initialized
+        setRetainInstance(true);
+
     }
 
-    @OnClick ({R.id.ingredient_cv}) void clic(View view){
-        if(view.getId()==R.id.ingredient_cv){
+    @OnClick({R.id.ingredient_cv})
+    void clic(View view) {
+        if (view.getId() == R.id.ingredient_cv) {
 //            recipe = bundle.getParcelable("RecipeDetails");
-            bundle.putParcelable("RecipeDetails",bundle.getParcelable("RecipeDetails"));
+            bundle.putParcelable("RecipeDetails", recipe);
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
             recipeIngredientsFragment.setArguments(bundle);
-            if(isTwoPane)
-            fragmentTransaction.replace(R.id.fragment_container_details, recipeIngredientsFragment).addToBackStack(null);
+            if (isTwoPane)
+                fragmentTransaction.replace(R.id.fragment_container_details, recipeIngredientsFragment).addToBackStack(null);
             else
                 fragmentTransaction.replace(R.id.fragment_container, recipeIngredientsFragment).addToBackStack(null);
             fragmentTransaction.commit();
@@ -58,17 +63,17 @@ public class RecipiesDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =inflater.inflate(R.layout.fragment_recipies_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_recipies_details, container, false);
 
-        unbinder = ButterKnife.bind(this,view);
+        unbinder = ButterKnife.bind(this, view);
         recipes_recycler_view.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recipes_recycler_view.setLayoutManager(linearLayoutManager);
 
-        if (getArguments()!=null){
+        if (getArguments() != null) {
             bundle = getArguments();
             recipe = bundle.getParcelable("RecipeDetails");
-            recipeStepsAdapter=new RecipeStepsAdapter(getActivity(),recipe.getSteps());
+            recipeStepsAdapter = new RecipeStepsAdapter(getActivity(), recipe.getSteps());
             recipes_recycler_view.setAdapter(recipeStepsAdapter);
         }
 

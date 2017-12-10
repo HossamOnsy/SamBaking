@@ -12,8 +12,8 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8sp"
-        android:elevation="16sp"
+        android:layout_margin="@dimen/eight_sp"
+        android:elevation="@dimen/sixteen_sp"
         android:orientation="vertical"
         app:cardBackgroundColor="@color/blac">
 
@@ -26,25 +26,36 @@
             android:id="@+id/ingredient_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8sp"
+            android:layout_margin="@dimen/eight_sp"
             android:textColor="@color/white"
+            android:gravity="center"
             android:text="@{ingredient.ingredient}"/>
 
-        <TextView
-            android:id="@+id/measure_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8sp"
-            android:textColor="@color/white"
-            android:text="@{ingredient.measure}"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/measure_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/eight_sp"
+                    android:textColor="@color/white"
+                    android:text="@{ingredient.measure}"
+                    android:layout_weight="1"
+                    android:gravity="center"/>
 
-        <TextView
-            android:id="@+id/quantity_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8sp"
-            android:textColor="@color/white"
-            android:text="@{String.valueOf(ingredient.quantity) }" />
+                <TextView
+                    android:id="@+id/quantity_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/eight_sp"
+                    android:textColor="@color/white"
+                    android:text="@{String.valueOf(ingredient.quantity) }"
+                    android:gravity="center"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

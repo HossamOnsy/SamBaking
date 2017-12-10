@@ -3,6 +3,7 @@ package com.hossam.sambaking.adapters;
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -27,12 +28,14 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
         this.activity = activity;
     }
 
-    public RecipeIngredientsAdapter() {
-    }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecipeIngredientCardListItemBinding recipeIngredientCardListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.recipe_ingredient_card_list_item, parent, false);
+        RecipeIngredientCardListItemBinding recipeIngredientCardListItemBinding =
+                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext())
+                        , R.layout.recipe_ingredient_card_list_item
+                        , parent, false);
 
         return new ViewHolder(recipeIngredientCardListItemBinding);
     }
@@ -41,7 +44,7 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Ingredient item = ingredients.get(position);
         holder.bind(item);
-
+        Log.v( "onBindViewHolder","position -------> " + position );
     }
 
     @Override

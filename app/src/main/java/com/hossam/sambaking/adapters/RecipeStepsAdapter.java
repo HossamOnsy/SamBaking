@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.hossam.sambaking.BR;
 import com.hossam.sambaking.R;
 import com.hossam.sambaking.databinding.RecipeStepCardListItemBinding;
@@ -38,7 +40,11 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecipeStepCardListItemBinding recipeStepCardListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.recipe_step_card_list_item, parent, false);
+        RecipeStepCardListItemBinding recipeStepCardListItemBinding =
+                DataBindingUtil.inflate(
+                        LayoutInflater.from(parent.getContext())
+                        , R.layout.recipe_step_card_list_item
+                        , parent, false);
 
         return new ViewHolder(recipeStepCardListItemBinding);
     }
@@ -47,6 +53,12 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Step item = steps.get(position);
         holder.bind(item);
+        ImageView imageView = holder.binding.getRoot().findViewById(R.id.step_iv);
+        if(!(item.getThumbnailURL().equals("")&&!item.getThumbnailURL().contains(".mp4")&&item.getThumbnailURL()!=null))
+            Glide.with(activity).load(item.getThumbnailURL()).into(imageView);
+        else
+            imageView.setVisibility(View.GONE);
+
         holder.binding.getRoot().setOnClickListener(
                 new View.OnClickListener() {
                     @Override

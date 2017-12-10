@@ -2,31 +2,51 @@ package com.hossam.sambaking.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.hossam.sambaking.R;
-import com.hossam.sambaking.activities.SimpleAppWidget;
+import com.hossam.sambaking.activities.SimpleAppWidgetProvider;
 import com.hossam.sambaking.adapters.RecipeIngredientsAdapter;
-import com.hossam.sambaking.models.Recipe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.hossam.sambaking.activities.MainActivity.recipe;
+
 public class RecipeIngredientsFragment extends Fragment {
 
     @BindView(R.id.recipes_recycler_view)
     RecyclerView recipes_recycler_view;
+    @BindView(R.id.coordinator)
+    CoordinatorLayout coordinator;
+
+    Snackbar snackbar;
+    Unbinder unbinder;
 
     public RecipeIngredientsFragment() {
         // Required empty public constructor
     }
-    Unbinder unbinder;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("check", 1);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,32 +58,41 @@ public class RecipeIngredientsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
 
 
+        unbinder = ButterKnife.bind(this, view);
 
-        if (getArguments()!=null){
-            unbinder= ButterKnife.bind(this,view);
-            recipes_recycler_view.setHasFixedSize(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-            recipes_recycler_view.setLayoutManager(linearLayoutManager);
-            Bundle bundle = getArguments();
-            final Recipe recipe = bundle.getParcelable("RecipeDetails");
-            RecipeIngredientsAdapter recipeIngredientsAdapter= null;
-            if (recipe != null) {
-                SimpleAppWidget simpleAppWidget = new SimpleAppWidget();
-
-             getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), "New task created", Toast.LENGTH_LONG).show();
-                        recipe.getIngredients();
-                        // this will send the broadcast to update the appwidget
-                        SimpleAppWidget.sendRefreshBroadcast(getActivity());
-                    }
-                });
-                recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(),recipe.getIngredients());
+            if (getArguments() != null) {
+                recipes_recycler_view.setHasFixedSize(true);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                recipes_recycler_view.setLayoutManager(linearLayoutManager);
+                Bundle bundle = getArguments();
+                recipe = bundle.getParcelable("RecipeDetails");
+                RecipeIngredientsAdapter recipeIngredientsAdapter = null;
+                recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(), recipe.getIngredients());
                 recipes_recycler_view.setAdapter(recipeIngredientsAdapter);
-            }else
-                Toast.makeText(getActivity(), "Emtpy", Toast.LENGTH_SHORT).show();
-        }
+
+                Log.v( "onBindViewHolder","savedInstanceState -------> "  );
+                SimpleAppWidgetProvider.sendRefreshBroadcast(getActivity());
+//             getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//
+//                         this will send the broadcast to update the appwidget
+//                        SimpleAppWidgetProvider.sendRefreshBroadcast(getActivity());
+//                    }
+//                });
+
+            } else {
+                snackbar = Snackbar.make(coordinator, "No Ingredients Available", Snackbar.LENGTH_LONG)
+                        .setAction("DISMISS", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snackbar.dismiss();
+                            }
+                        });
+
+                snackbar.show();
+            }
 
 
         return view;
