@@ -24,13 +24,15 @@ android {
 }
 ext {
     supportLibVersion = '26.1.0'
+    espressoCore = '3.0.1'
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:${espressoCore}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestCompile ("com.android.support.test.espresso:espresso-intents:${espressoCore}")
 //    // Android runner and rules support
 //    androidTestCompile 'com.android.support.test:runner:0.5'
 //    androidTestCompile 'com.android.support.test:rules:0.5'
@@ -56,4 +58,10 @@ dependencies {
 
 
     compile 'com.github.bumptech.glide:glide:4.0.0'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
 }

@@ -24,8 +24,8 @@ import static com.hossam.sambaking.activities.MainActivity.recipe;
 
 public class RecipeIngredientsFragment extends Fragment {
 
-    @BindView(R.id.recipes_recycler_view)
-    RecyclerView recipes_recycler_view;
+    @BindView(R.id.ingredients_recycler_view)
+    RecyclerView ingredients_recycler_view;
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinator;
 
@@ -61,14 +61,14 @@ public class RecipeIngredientsFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
             if (getArguments() != null) {
-                recipes_recycler_view.setHasFixedSize(true);
+                ingredients_recycler_view.setHasFixedSize(true);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                recipes_recycler_view.setLayoutManager(linearLayoutManager);
+                ingredients_recycler_view.setLayoutManager(linearLayoutManager);
                 Bundle bundle = getArguments();
                 recipe = bundle.getParcelable("RecipeDetails");
                 RecipeIngredientsAdapter recipeIngredientsAdapter = null;
                 recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(), recipe.getIngredients());
-                recipes_recycler_view.setAdapter(recipeIngredientsAdapter);
+                ingredients_recycler_view.setAdapter(recipeIngredientsAdapter);
 
                 Log.v( "onBindViewHolder","savedInstanceState -------> "  );
                 SimpleAppWidgetProvider.sendRefreshBroadcast(getActivity());

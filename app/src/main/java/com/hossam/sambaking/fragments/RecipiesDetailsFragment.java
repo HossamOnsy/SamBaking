@@ -23,8 +23,8 @@ import static com.hossam.sambaking.activities.RecipeDetailsActivity.isTwoPane;
 
 
 public class RecipiesDetailsFragment extends Fragment {
-    @BindView(R.id.recipes_recycler_view)
-    RecyclerView recipes_recycler_view;
+    @BindView(R.id.steps_recycle_view)
+    RecyclerView steps_recycle_view;
     @BindView(R.id.ingredient_cv)
     CardView ingredient_cv;
     Bundle bundle;
@@ -66,15 +66,15 @@ public class RecipiesDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recipies_details, container, false);
 
         unbinder = ButterKnife.bind(this, view);
-        recipes_recycler_view.setHasFixedSize(true);
+        steps_recycle_view.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recipes_recycler_view.setLayoutManager(linearLayoutManager);
+        steps_recycle_view.setLayoutManager(linearLayoutManager);
 
         if (getArguments() != null) {
             bundle = getArguments();
             recipe = bundle.getParcelable("RecipeDetails");
             recipeStepsAdapter = new RecipeStepsAdapter(getActivity(), recipe.getSteps());
-            recipes_recycler_view.setAdapter(recipeStepsAdapter);
+            steps_recycle_view.setAdapter(recipeStepsAdapter);
         }
 
         return view;
