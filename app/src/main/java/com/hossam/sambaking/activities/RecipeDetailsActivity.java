@@ -21,7 +21,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
 
     Recipe recipe;
-    public static boolean isTwoPane;
+
     Snackbar snackbar;
 
     @BindView(R.id.fragment_container)
@@ -38,6 +38,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //        if (fragmentItemDetail != null) {
 //            isTwoPane = true;
 //        }
+
         if(savedInstanceState==null) {
             if (getIntent().hasExtra("RecipeDetails")) {
                 recipe = getIntent().getParcelableExtra("RecipeDetails");

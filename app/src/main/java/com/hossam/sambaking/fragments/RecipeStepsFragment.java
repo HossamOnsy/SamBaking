@@ -114,22 +114,23 @@ public class RecipeStepsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        if (player != null)
-            player.release();
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (player != null)
-            player.stop();
+        if (player != null) {
+            player.release();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (player != null)
-            player.stop();
+        if (player != null) {
+            player.release();
+        }
     }
 
     @Override
@@ -224,6 +225,7 @@ public class RecipeStepsFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong("timer", player.getCurrentPosition());
+        player = null;
     }
 
 

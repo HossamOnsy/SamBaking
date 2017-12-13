@@ -3,6 +3,7 @@ package com.hossam.sambaking.fragments;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +19,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.hossam.sambaking.activities.MainActivity.isTwoPane;
 import static com.hossam.sambaking.activities.MainActivity.recipe;
-import static com.hossam.sambaking.activities.RecipeDetailsActivity.isTwoPane;
 
 
 public class RecipiesDetailsFragment extends Fragment {
@@ -42,6 +43,12 @@ public class RecipiesDetailsFragment extends Fragment {
         setRetainInstance(true);
 
     }
+//
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//
+//    }
 
     @OnClick({R.id.ingredient_cv})
     void clic(View view) {

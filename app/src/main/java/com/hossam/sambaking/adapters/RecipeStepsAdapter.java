@@ -19,7 +19,7 @@ import com.hossam.sambaking.models.Step;
 
 import java.util.List;
 
-import static com.hossam.sambaking.activities.RecipeDetailsActivity.isTwoPane;
+import static com.hossam.sambaking.activities.MainActivity.isTwoPane;
 
 /**
  * Created by hossam on 24/11/17.
