@@ -12,6 +12,8 @@ import android.widget.RemoteViews;
 
 import com.hossam.sambaking.R;
 
+import static com.hossam.sambaking.activities.MainActivity.recipe;
+
 /**
  * Created by hossam on 06/12/17.
  */
@@ -78,7 +80,10 @@ public class SimpleAppWidgetProvider extends AppWidgetProvider {
             // Instantiate the RemoteViews object for the app widget layout.
 
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.simpe_app_widget_info);
-
+            Intent mainIntent = new Intent(context, RecipeDetailsActivity.class);
+            PendingIntent mainPendingIntent = PendingIntent.getActivity(context, 0, mainIntent, 0);
+            rv.setOnClickPendingIntent(R.id.widget_text_view, mainPendingIntent);
+            rv.setTextViewText(R.id.widget_text_view, recipe.getName());
             // Set up the RemoteViews object to use a RemoteViews adapter.
 
             // This adapter connects
@@ -108,6 +113,7 @@ public class SimpleAppWidgetProvider extends AppWidgetProvider {
             // Do additional processing specific to this app widget...
 
             //
+
 
             appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
 

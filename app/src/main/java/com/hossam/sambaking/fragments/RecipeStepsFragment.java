@@ -40,6 +40,7 @@ public class RecipeStepsFragment extends Fragment {
     public static boolean activityCreated = false;
     Step step;
     Bundle bundle = null;
+    boolean isPlayWhenReady =true;
     //    @BindView(R.id.step_media_player)
 //    View step_media_player;
 //    @BindView(R.id.iv_step)
@@ -80,6 +81,7 @@ public class RecipeStepsFragment extends Fragment {
 
         if (savedInstanceState != null)
             bundle = savedInstanceState;
+
         if (getArguments() != null) {
             step = getArguments().getParcelable("RecipeStepDetails");
             long_description_tv.setText(step != null ? step.getDescription() : null);
@@ -170,7 +172,9 @@ public class RecipeStepsFragment extends Fragment {
                         new DefaultTrackSelector(), new DefaultLoadControl());
 
             }
-            player.setPlayWhenReady(true);
+            if(bundle!=null)
+                isPlayWhenReady = bundle.getBoolean("playstate");
+            player.setPlayWhenReady(isPlayWhenReady);
             player.prepare(mediaSource, true, false);
             player.setVideoDebugListener(new VideoRendererEventListener() {
                 @Override
@@ -212,6 +216,7 @@ public class RecipeStepsFragment extends Fragment {
             video_view.setPlayer(player);
             if (bundle != null) {
                 player.seekTo(bundle.getLong("timer"));
+
             }
 
         }
@@ -224,8 +229,11 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong("timer", player.getCurrentPosition());
-        player = null;
+        if(player!=null) {
+            outState.putLong("timer", player.getCurrentPosition());
+            boolean isPlayWhenReady = player.getPlayWhenReady();
+            outState.putBoolean("playstate", isPlayWhenReady);
+        }
     }
 
 

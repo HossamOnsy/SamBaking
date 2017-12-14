@@ -64,9 +64,7 @@ public class RecipeIngredientsFragment extends Fragment {
                 ingredients_recycler_view.setHasFixedSize(true);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 ingredients_recycler_view.setLayoutManager(linearLayoutManager);
-                Bundle bundle = getArguments();
-                recipe = bundle.getParcelable("RecipeDetails");
-                RecipeIngredientsAdapter recipeIngredientsAdapter = null;
+                RecipeIngredientsAdapter recipeIngredientsAdapter;
                 recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(), recipe.getIngredients());
                 ingredients_recycler_view.setAdapter(recipeIngredientsAdapter);
 
