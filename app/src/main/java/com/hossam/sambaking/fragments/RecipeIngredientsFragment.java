@@ -12,15 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.hossam.sambaking.R;
+import com.hossam.sambaking.Utils;
 import com.hossam.sambaking.activities.SimpleAppWidgetProvider;
 import com.hossam.sambaking.adapters.RecipeIngredientsAdapter;
+import com.hossam.sambaking.models.Recipe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static com.hossam.sambaking.activities.MainActivity.recipe;
 
 public class RecipeIngredientsFragment extends Fragment {
 
@@ -31,6 +32,7 @@ public class RecipeIngredientsFragment extends Fragment {
 
     Snackbar snackbar;
     Unbinder unbinder;
+    Recipe recipe;
 
     public RecipeIngredientsFragment() {
         // Required empty public constructor
@@ -59,17 +61,31 @@ public class RecipeIngredientsFragment extends Fragment {
 
 
         unbinder = ButterKnife.bind(this, view);
+        Gson gson = new Gson();
+        String json = Utils.getFromPreference(getActivity(), "Recipe");
+        recipe = gson.fromJson(json, Recipe.class);
+        if (recipe != null) {
+            ingredients_recycler_view.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            ingredients_recycler_view.setLayoutManager(linearLayoutManager);
+            RecipeIngredientsAdapter recipeIngredientsAdapter;
 
-            if (getArguments() != null) {
-                ingredients_recycler_view.setHasFixedSize(true);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                ingredients_recycler_view.setLayoutManager(linearLayoutManager);
-                RecipeIngredientsAdapter recipeIngredientsAdapter;
-                recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(), recipe.getIngredients());
-                ingredients_recycler_view.setAdapter(recipeIngredientsAdapter);
+            recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(), recipe.getIngredients());
+            ingredients_recycler_view.setAdapter(recipeIngredientsAdapter);
 
-                Log.v( "onBindViewHolder","savedInstanceState -------> "  );
-                SimpleAppWidgetProvider.sendRefreshBroadcast(getActivity());
+            Log.v("onBindViewHolder", "savedInstanceState -------> ");
+            SimpleAppWidgetProvider.sendRefreshBroadcast(getActivity());
+        } else {
+            snackbar = Snackbar.make(coordinator, "No Ingredients Available", Snackbar.LENGTH_LONG)
+                    .setAction("DISMISS", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            snackbar.dismiss();
+                        }
+                    });
+
+            snackbar.show();
+        }
 //             getActivity().runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -80,17 +96,17 @@ public class RecipeIngredientsFragment extends Fragment {
 //                    }
 //                });
 
-            } else {
-                snackbar = Snackbar.make(coordinator, "No Ingredients Available", Snackbar.LENGTH_LONG)
-                        .setAction("DISMISS", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snackbar.dismiss();
-                            }
-                        });
-
-                snackbar.show();
-            }
+//             {
+//                snackbar = Snackbar.make(coordinator, "No Ingredients Available", Snackbar.LENGTH_LONG)
+//                        .setAction("DISMISS", new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                snackbar.dismiss();
+//                            }
+//                        });
+//
+//                snackbar.show();
+//            }
 
 
         return view;

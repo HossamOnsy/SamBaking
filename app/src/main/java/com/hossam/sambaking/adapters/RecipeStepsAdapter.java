@@ -69,9 +69,9 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
                         RecipeStepsFragment recipeStepsFragment = new RecipeStepsFragment();
                         recipeStepsFragment.setArguments(bundle);
                         if(isTwoPane)
-                            fragmentTransaction.replace(R.id.fragment_container_details, recipeStepsFragment).addToBackStack(null);
+                            fragmentTransaction.replace(R.id.fragment_container_details, recipeStepsFragment,"recipeStepsFragment").addToBackStack(null);
                         else
-                            fragmentTransaction.replace(R.id.fragment_container, recipeStepsFragment).addToBackStack(null);
+                            fragmentTransaction.replace(R.id.fragment_container, recipeStepsFragment,"recipeStepsFragment").addToBackStack(null);
 
                         fragmentTransaction.commit();
 //                        Toast.makeText(activity, "clicked", Toast.LENGTH_SHORT).show();

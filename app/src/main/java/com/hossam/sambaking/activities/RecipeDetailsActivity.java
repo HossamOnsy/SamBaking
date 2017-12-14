@@ -1,17 +1,19 @@
 package com.hossam.sambaking.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 
+import com.google.gson.Gson;
 import com.hossam.sambaking.R;
+import com.hossam.sambaking.Utils;
+import com.hossam.sambaking.fragments.RecipeIngredientsFragment;
 import com.hossam.sambaking.fragments.RecipiesDetailsFragment;
 import com.hossam.sambaking.models.Recipe;
 
@@ -38,27 +40,39 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //        if (fragmentItemDetail != null) {
 //            isTwoPane = true;
 //        }
+        Gson gson = new Gson();
+        String json = Utils.getFromPreference(RecipeDetailsActivity.this, "Recipe");
+        Recipe recipe = gson.fromJson(json, Recipe.class);
 
         if(savedInstanceState==null) {
             if (getIntent().hasExtra("RecipeDetails")) {
-                recipe = getIntent().getParcelableExtra("RecipeDetails");
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("RecipeDetails", getIntent().getParcelableExtra("RecipeDetails"));
+                                Bundle bundle = new Bundle();
+                bundle.putParcelable("RecipeDetails",recipe);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 RecipiesDetailsFragment recipiesDetailsFragment = new RecipiesDetailsFragment();
                 recipiesDetailsFragment.setArguments(bundle);
-                fragmentTransaction.add(R.id.fragment_container, recipiesDetailsFragment);
+                fragmentTransaction.add(R.id.fragment_container, recipiesDetailsFragment,"recipiesDetailsFragment");
                 fragmentTransaction.commit();
             } else {
-                snackbar = Snackbar.make(fragment_container, "No Ingredients Available", Snackbar.LENGTH_LONG)
-                        .setAction("DISMISS", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snackbar.dismiss();
-                            }
-                        });
+//                if(getIntent().hasExtra("fromWidget")){
 
-                snackbar.show();
+                if(recipe!=null) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
+                    fragmentTransaction.add(R.id.fragment_container, recipeIngredientsFragment,"recipeIngredientsFragment");
+                    fragmentTransaction.commit();
+                }
+//                }else {
+//                    snackbar = Snackbar.make(fragment_container, "No Ingredients Available", Snackbar.LENGTH_LONG)
+//                            .setAction("DISMISS", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    snackbar.dismiss();
+//                                }
+//                            });
+//
+//                    snackbar.show();
+//                }
             }
         }
 //        ActionBar actionBar = getActionBar();

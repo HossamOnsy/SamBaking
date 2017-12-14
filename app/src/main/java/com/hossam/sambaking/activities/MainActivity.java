@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.hossam.sambaking.R;
+import com.hossam.sambaking.Utils;
 import com.hossam.sambaking.adapters.RecipeAdapter;
 import com.hossam.sambaking.controller.RecipesController;
 import com.hossam.sambaking.models.Recipe;
@@ -25,8 +26,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
-    public static Recipe recipe = null;
 
+    Recipe recipe=null;
     public static boolean isTwoPane;
 
     @BindView(R.id.recipes_recycler_view)
@@ -73,14 +74,15 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
             @Override
             public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                 if (response.code() >= 200 && response.code() < 300 && response.isSuccessful()) {
-
-                    if (recipe == null)
-                        if (response.body().size() > 0)
+                    if (recipe == null) {
+                        if (response.body().size() > 0) {
                             recipe = response.body().get(0);
+                        }
+                    }
 
+                    Utils.saveObjectInPreference(MainActivity.this, "Recipe", recipe);
                     recipeAdapter = new RecipeAdapter(MainActivity.this, response.body());
                     recipes_recycler_view.setAdapter(recipeAdapter);
-
 
                 } else
                     prepareSnack("Please Try Again Later", "DISMISS");

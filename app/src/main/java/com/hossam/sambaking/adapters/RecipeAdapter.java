@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.hossam.sambaking.BR;
 import com.hossam.sambaking.R;
+import com.hossam.sambaking.Utils;
 import com.hossam.sambaking.activities.RecipeDetailsActivity;
 import com.hossam.sambaking.databinding.RecipeCardListItemBinding;
 import com.hossam.sambaking.models.Recipe;
@@ -60,6 +61,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                     @Override
                     public void onClick(View view) {
 //                        Toast.makeText(activity, "clicked", Toast.LENGTH_SHORT).show();
+                        Utils.saveObjectInPreference(activity, "Recipe", item);
                         activity.startActivity(new Intent(activity, RecipeDetailsActivity.class)
                                 .putExtra("RecipeDetails", item));
                     }

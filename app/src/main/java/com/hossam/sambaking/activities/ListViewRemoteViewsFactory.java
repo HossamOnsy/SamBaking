@@ -7,10 +7,11 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
+import com.google.gson.Gson;
 import com.hossam.sambaking.R;
+import com.hossam.sambaking.Utils;
 import com.hossam.sambaking.models.Ingredient;
-
-import static com.hossam.sambaking.activities.MainActivity.recipe;
+import com.hossam.sambaking.models.Recipe;
 
 
 /**
@@ -20,8 +21,8 @@ import static com.hossam.sambaking.activities.MainActivity.recipe;
 public class ListViewRemoteViewsFactory implements RemoteViewsFactory {
 
 
+    Recipe recipe = null;
     private Context mContext;
-
 //            private ArrayList<String> records;
 
 
@@ -34,6 +35,10 @@ public class ListViewRemoteViewsFactory implements RemoteViewsFactory {
     // Initialize the data set.
     @Override
     public void onCreate() {
+        Gson gson = new Gson();
+        String json = Utils.getFromPreference(mContext, "Recipe");
+        recipe = gson.fromJson(json, Recipe.class);
+
 
         // In onCreate() you set up any connections / cursors to your data source. Heavy lifting,
 
@@ -41,7 +46,6 @@ public class ListViewRemoteViewsFactory implements RemoteViewsFactory {
 
         // or getViewAt(). Taking more than 20 seconds in this call will result in an ANR.
 
-//                records=new ArrayList/<String>();
 
     }
 
@@ -99,8 +103,10 @@ public class ListViewRemoteViewsFactory implements RemoteViewsFactory {
     public int getCount() {
 
         Log.e("size=", recipe.getIngredients().size() + "");
-
-        return recipe.getIngredients().size();
+        if (recipe != null)
+            return recipe.getIngredients().size();
+        else
+            return 0;
 
     }
 

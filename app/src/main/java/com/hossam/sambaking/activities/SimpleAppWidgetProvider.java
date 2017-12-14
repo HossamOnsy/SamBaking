@@ -10,16 +10,16 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.google.gson.Gson;
 import com.hossam.sambaking.R;
-
-import static com.hossam.sambaking.activities.MainActivity.recipe;
+import com.hossam.sambaking.Utils;
+import com.hossam.sambaking.models.Recipe;
 
 /**
  * Created by hossam on 06/12/17.
  */
 
 public class SimpleAppWidgetProvider extends AppWidgetProvider {
-
 
     public static final String UPDATE_MEETING_ACTION = "android.appwidget.action.APPWIDGET_UPDATE";
     public static final String EXTRA_ITEM = "com.example.edockh.EXTRA_ITEM";
@@ -49,6 +49,7 @@ public class SimpleAppWidgetProvider extends AppWidgetProvider {
 
 
         }
+
 
         super.onReceive(context, intent);
 
@@ -80,9 +81,15 @@ public class SimpleAppWidgetProvider extends AppWidgetProvider {
             // Instantiate the RemoteViews object for the app widget layout.
 
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.simpe_app_widget_info);
-            Intent mainIntent = new Intent(context, RecipeDetailsActivity.class);
+            Intent mainIntent = new Intent(context, RecipeDetailsActivity.class).putExtra("fromWidget","true");
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent mainPendingIntent = PendingIntent.getActivity(context, 0, mainIntent, 0);
             rv.setOnClickPendingIntent(R.id.widget_text_view, mainPendingIntent);
+
+            Gson gson = new Gson();
+            String json = Utils.getFromPreference(context, "Recipe");
+            Recipe recipe = gson.fromJson(json, Recipe.class);
+            if(recipe!=null)
             rv.setTextViewText(R.id.widget_text_view, recipe.getName());
             // Set up the RemoteViews object to use a RemoteViews adapter.
 

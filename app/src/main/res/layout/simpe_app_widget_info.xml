@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gold"
+    android:background="@color/white"
     android:gravity="center"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
+
     <TextView
+        android:id="@+id/widget_text_view"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:id="@+id/widget_text_view"
         android:layout_weight="1"
         android:gravity="center"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:text="recipe"/>
-<ListView
-    android:id="@+id/widget_listview"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_margin="@dimen/eight_sp"
-    android:dividerHeight="3dp"
-    android:layout_weight="9">
+        android:text="@string/recipe"
+        android:textColor="@color/blac"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-</ListView>
+    <ListView
+        android:id="@+id/widget_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:dividerHeight="3dp">
+
+    </ListView>
 
 
 </LinearLayout>

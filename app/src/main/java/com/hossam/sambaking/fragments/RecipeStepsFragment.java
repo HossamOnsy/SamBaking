@@ -34,7 +34,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-
 public class RecipeStepsFragment extends Fragment {
 
     public static boolean activityCreated = false;
@@ -59,12 +58,7 @@ public class RecipeStepsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // retain this fragment when activity is re-initialized
-        setRetainInstance(true);
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
