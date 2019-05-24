@@ -27,12 +27,12 @@ ext {
     espressoCore = '3.0.1'
 }
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    androidTestCompile("com.android.support.test.espresso:espresso-core:${espressoCore}", {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:${espressoCore}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestCompile ("com.android.support.test.espresso:espresso-intents:${espressoCore}")
+    androidTestImplementation ("com.android.support.test.espresso:espresso-intents:${espressoCore}")
 //    // Android runner and rules support
 //    androidTestCompile 'com.android.support.test:runner:0.5'
 //    androidTestCompile 'com.android.support.test:rules:0.5'
@@ -40,25 +40,25 @@ dependencies {
     // add this for intent mocking support
 //    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
 
-    compile("com.android.support:appcompat-v7:${supportLibVersion}")
-    compile("com.android.support:recyclerview-v7:${supportLibVersion}")
-    compile("com.android.support:design:${supportLibVersion}")
-    compile("com.android.support:support-v4:${supportLibVersion}")
-    compile("com.android.support:cardview-v7:${supportLibVersion}")
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.jakewharton:butterknife:8.8.1'
-    compile 'com.google.android.exoplayer:exoplayer:r2.4.0'
+    implementation("com.android.support:appcompat-v7:${supportLibVersion}")
+    implementation("com.android.support:recyclerview-v7:${supportLibVersion}")
+    implementation("com.android.support:design:${supportLibVersion}")
+    implementation("com.android.support:support-v4:${supportLibVersion}")
+    implementation("com.android.support:cardview-v7:${supportLibVersion}")
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
 
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+    testImplementation 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
 
 
-    compile 'com.github.bumptech.glide:glide:4.0.0'
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
+    implementation 'com.github.bumptech.glide:glide:4.0.0'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'design'
